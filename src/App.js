@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { ConfigProvider } from 'antd';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Form from './components/Form';
+import Content from './components/Content';
+import EditScheda from './components/EditScheda';
+import Navbar from './components/Navbar';
+import FormComponent from './components/FormComponent';
+import './styles/App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <ConfigProvider>
+        <Router>
+            <div>
+                <Navbar />
+                <div className="main-content">
+                    <Routes>
+                        <Route path="/add-scheda" element={<Form />} />
+                        <Route path="/" element={<Content />} />
+                        <Route path="/edit-scheda" element={<EditScheda />} />
+                        <Route path="/edit-form" element={<FormComponent />} />
+                    </Routes>
+                </div>
+            </div>
+        </Router>
+        </ConfigProvider>
+    );
 }
 
 export default App;
