@@ -33,7 +33,25 @@ const FormComponent = () => {
         }
     }, [idScheda, form]);
 
+    const validateTags = () => {
+        const tags = form.getFieldValue('tags');
+        if (!tags || tags.length === 0) {
+            return false;
+        }
+        return true;
+    };
+
     const handleSubmit = (values) => {
+        if (!validateTags()) {
+            form.setFields([
+                {
+                    name: 'tags',
+                    errors: ['Inserire tag!'],
+                },
+            ]);
+            return;
+        }
+
         const schedaRef = idScheda ? ref(db, `schede/${idScheda}`) : push(ref(db, 'schede'));
         set(schedaRef, values)
             .then(() => {
