@@ -127,7 +127,7 @@ const FormComponent = () => {
                         </Space>
                     ))}
                     <Form.Item>
-                        <Button block type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                         Aggiungi Tag
                         </Button>
                     </Form.Item>
