@@ -1,21 +1,33 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, Form, Button, Input, Alert, Typography } from "antd";
+import { Row, Col, Card, Button, Input, Alert, Space } from "antd";
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { db } from './firebase';
 import { ref, get } from 'firebase/database';
 import logo from '../styles/logo_sito.jpg';  // Importa il logo
 
-const { Title } = Typography;
-
 const Content = () => {
     const [cercato, setCercato] = useState(false);
     const [schede, setSchede] = useState([]);
-    const [form] = Form.useForm();
-
-    const handleSubmit = (values) => {
-        let { tags } = values;
-        tags = tags.toLowerCase(); // Converti le chiavi di ricerca in minuscolo
-        const chiaviCercate = tags.split(" ").filter((val) => val);
+    const [tags, setTags] = useState(['']);
+  
+    const handleAddTag = () => {
+        setTags([...tags, '']);
+    };
+  
+    const handleRemoveTag = (index) => {
+        const newTags = tags.filter((_, i) => i !== index);
+        setTags(newTags);
+    };
+  
+    const handleTagChange = (index, event) => {
+        const newTags = [...tags];
+        newTags[index] = event.target.value;
+        setTags(newTags);
+    };
+  
+    const handleSubmit = () => {
+        const chiaviCercate = tags.map(tag => tag.toLowerCase()).filter(tag => tag);
 
         const schedeRef = ref(db, 'schede');
         get(schedeRef)
@@ -46,7 +58,7 @@ const Content = () => {
             .catch((error) => {
                 console.error("Errore nel recupero delle schede:", error);
             });
-    }
+    };
 
     return (
         <>
@@ -56,39 +68,32 @@ const Content = () => {
                     <img src={logo} alt="Logo del sito" style={{ maxWidth: '100%', height: 'auto' }} />
                 </div>
                 <Card>
-                    <Form
-                        form={form}
-                        onFinish={handleSubmit}
-                        autoComplete="off"
-                        layout="vertical"
-                    >
-                        <Form.Item
-                            label=""
-                            name="tags"
-                            rules={[
-                                {
-                                    required: true,
-                                    whitespace: true,
-                                    message: 'Inserire chiave di ricerca!',
-                                },
-                            ]}
-                        >
-                            <Input 
-                                placeholder="Inserire Tags"/>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" block onClick={(e) => {
-                                form.submit(e);
-                            }}>
-                                Cerca
-                            </Button>
-                        </Form.Item>
-                    </Form>
+                    <div style={{ marginBottom: 16 }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                            {tags.map((tag, index) => (
+                                <Space key={index} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                    <Input
+                                        placeholder="Tag"
+                                        value={tag}
+                                        onChange={(e) => handleTagChange(index, e)}
+                                        style={{ width: '200px' }}  // Puoi modificare la larghezza in base alle tue esigenze
+                                    />
+                                    <MinusCircleOutlined onClick={() => handleRemoveTag(index)} />
+                                </Space>
+                            ))}
+                        </div>
+                        <Button type="dashed" onClick={handleAddTag} block icon={<PlusOutlined />}>
+                            Aggiungi Tag
+                        </Button>
+                    </div>
+                    <Button type="primary" block onClick={handleSubmit}>
+                        Cerca
+                    </Button>
                 </Card>
             </Col>
         </Row>
         {cercato &&
-        <Row justify="center" style={{ marginTop: 16}}>
+        <Row justify="center" style={{ marginTop: 16 }}>
             <Col xs={24} md={12}>
                 {!schede.length
                 ?
@@ -137,7 +142,7 @@ const Content = () => {
             }
         `}</style>
         </>
-    )
+    );
 };
 
 export default Content;
