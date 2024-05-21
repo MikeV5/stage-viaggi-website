@@ -37,16 +37,6 @@ const styles = StyleSheet.create({
       </Page>
     </Document>
   );
-/*
-const MyDocument = ({ scheda }) => (
-    <Document>
-      <Page size="A4" style={{ margin: '20px' }}>
-        <Text style={{ textAlign: 'center' }}>{scheda.titolo}</Text>
-        <Text style={{ textAlign: 'center' }}>{scheda.testo}</Text>
-      </Page>
-    </Document>
-  );*/
-
 
 const EditScheda = () => {
   const [scheda, setScheda] = useState();
