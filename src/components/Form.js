@@ -14,6 +14,10 @@ const FormComponent = () => {
     const [schede, setSchede] = useState([]);
 
     const handleSubmit = (values) => {
+         // Converti i tag in minuscolo
+         if (values.tags) {
+            values.tags = values.tags.map(tag => tag.toLowerCase());
+        }
         console.log(values)
         // return;
 
@@ -21,6 +25,7 @@ const FormComponent = () => {
         set(nuovaSchedaRef, values)
             .then(() => {
                 alert('Dati salvati nel database!');
+                form.resetFields(); // Reset del form dopo la chiusura dell'alert
             })
             .catch((error) => {
                 console.error('Errore nel salvataggio dei dati:', error);

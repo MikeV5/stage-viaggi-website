@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { db } from './firebase';
 import { ref, get, set, push } from 'firebase/database';
 
@@ -11,6 +11,7 @@ import '../styles/Form.css';
 const FormComponent = () => {
     const [form] = Form.useForm();
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate(); // Inizializza useNavigate
     const idScheda = searchParams.get("scheda");
     const [scheda, setScheda] = useState(null);
 
@@ -38,6 +39,7 @@ const FormComponent = () => {
         set(schedaRef, values)
             .then(() => {
                 alert('Dati salvati nel database!');
+                navigate('/'); // Reindirizza alla homepage dopo l'alert
             })
             .catch((error) => {
                 console.error('Errore nel salvataggio dei dati:', error);
