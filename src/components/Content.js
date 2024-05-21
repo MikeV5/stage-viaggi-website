@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Card, Form, Button, Input, Alert, Typography } from "antd";
 import { db } from './firebase';
 import { ref, get } from 'firebase/database';
+import logo from '../styles/logo_sito.jpg';  // Importa il logo
 
 const { Title } = Typography;
 
@@ -51,7 +52,9 @@ const Content = () => {
         <>
         <Row justify="center">
             <Col xs={24} md={12}>
-                <Title level={1} style={{ textAlign: 'center', fontStyle: 'italic', fontFamily: 'Lucida Handwriting, cursive', fontSize: '2.5rem' }}>Storia dei Viaggi</Title>
+                <div style={{ textAlign: 'center' }}>
+                    <img src={logo} alt="Logo del sito" style={{ maxWidth: '100%', height: 'auto' }} />
+                </div>
                 <Card>
                     <Form
                         form={form}
@@ -121,13 +124,15 @@ const Content = () => {
         }
         <style jsx>{`
             @media (max-width: 768px) {
-                h1 {
-                    font-size: 2rem;
+                img {
+                    max-width: 100%;
+                    height: auto;
                 }
             }
             @media (max-width: 480px) {
-                h1 {
-                    font-size: 1.5rem;
+                img {
+                    max-width: 100%;
+                    height: auto;
                 }
             }
         `}</style>
