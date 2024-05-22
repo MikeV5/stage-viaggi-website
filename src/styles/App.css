@@ -47,3 +47,7 @@ body {
 .content h1 {
   margin-top: 0;
 }
+
+.white-space-pre-line {
+  white-space: pre-line;
+}

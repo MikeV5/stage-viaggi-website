@@ -25,31 +25,13 @@ const FormComponent = () => {
         set(nuovaSchedaRef, values)
             .then(() => {
                 alert('Dati salvati nel database!');
-                form.resetFields(); // Reset del form dopo la chiusura dell'alert
+                form.resetFields(); // Reset del form dopo il salvataggio della scheda
             })
             .catch((error) => {
                 console.error('Errore nel salvataggio dei dati:', error);
             });
     };
 
-    const recuperaSchede = () => {
-        const schedeRef = ref(db, 'schede');
-        get(schedeRef)
-            .then((snapshot) => {
-                if (snapshot.exists()) {
-                    const data = [];
-                    snapshot.forEach((childSnapshot) => {
-                        data.push(childSnapshot.val());
-                    });
-                    setSchede(data);
-                } else {
-                    console.log("Nessuna scheda trovata nel database");
-                }
-            })
-            .catch((error) => {
-                console.error("Errore nel recupero delle schede:", error);
-            });
-    };
 
     return (
     <Row justify="center">

@@ -21,6 +21,10 @@ const AllSchede = () => {
                             ...scheda
                         });
                     });
+
+                    // Ordina le schede in ordine alfabetico in base all'autore
+                    data.sort((a, b) => a.autore.localeCompare(b.autore));
+
                     setSchede(data);
                 } else {
                     console.log("Nessuna scheda trovata nel database");
