@@ -1,10 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, Button, Input, Alert, Space } from "antd";
+import { Row, Col, Card, Button, Input, Alert, Space, Divider } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { db } from './firebase';
 import { ref, get } from 'firebase/database';
 import logo from '../styles/logo_sito.jpg';  // Importa il logo
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import '../styles/App.css';
+
+const stripHtmlTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
 
 const Content = () => {
     const [cercato, setCercato] = useState(false);
@@ -40,7 +48,6 @@ const Content = () => {
                         const { tags = [] } = scheda;
 
                         if (!chiaviCercate.every((chiaveCercata) => {
-                            // la ricerca includerà le schede che contengono anche solo una parte del tag inserito
                             return tags.some((tag) => tag.toLowerCase().includes(chiaveCercata));
                         }))
                             return;
@@ -77,7 +84,7 @@ const Content = () => {
                                         placeholder="Tag"
                                         value={tag}
                                         onChange={(e) => handleTagChange(index, e)}
-                                        style={{ width: '200px' }}  // Puoi modificare la larghezza in base alle tue esigenze
+                                        style={{ width: '200px' }}
                                     />
                                     <MinusCircleOutlined onClick={() => handleRemoveTag(index)} />
                                 </Space>
@@ -87,7 +94,7 @@ const Content = () => {
                             Aggiungi Tag
                         </Button>
                     </div>
-                    <Button type="primary" block onClick={handleSubmit}>
+                    <Button type="primary" block onClick={handleSubmit} style={{ marginLeft: '8px' }}>
                         Cerca
                     </Button>
                 </Card>
@@ -107,20 +114,29 @@ const Content = () => {
                         {schede.map((scheda, index) => {
                             const { id, titolo, autore } = scheda;
                             return (
-                                <Link
-                                    key={index}
-                                    to={`/edit-scheda?scheda=${id}`}
-                                >
-                                    <Card
-                                        title={autore}
-                                        hoverable
-                                        style={{
-                                            marginBottom: 8
-                                        }}
-                                    >
-                                        {titolo}
+                                <div key={index} style={{ marginBottom: '2px' }}> {/* Contenitore esterno con margine inferiore */}
+                                <Link to={`/edit-scheda?scheda=${id}`}>
+                                <Card hoverable>
+                                <div style={{ padding: '0px 0px 0px 0px' }}> {/* Aggiunto padding orizzontale */}
+                                            <h1 className="autore-quill">
+                                                <ReactQuill
+                                                    value={scheda.autore}
+                                                    readOnly={true}
+                                                    theme={"bubble"}
+                                                />
+                                            </h1>
+                                            <Divider />
+                                            <div className="titolo-quill">
+                                                <ReactQuill
+                                                    value={scheda.titolo}
+                                                    readOnly={true}
+                                                    theme={"bubble"}
+                                                />
+                                            </div>
+                                        </div>
                                     </Card>
                                 </Link>
+                            </div>
                             )
                         })}
                     </>

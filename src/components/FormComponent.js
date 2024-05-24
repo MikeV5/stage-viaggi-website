@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { db } from './firebase';
 import { ref, get, set, push } from 'firebase/database';
-
-import { Row, Col, Card, Form, Input, Button, Space, Divider } from 'antd';
+import { Row, Col, Card, Form, Input, Button, Space, Divider, message } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import '../styles/Form.css';
+
+const stripHtmlTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
 
 const FormComponent = () => {
     const [form] = Form.useForm();
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate(); // Inizializza useNavigate
+    const navigate = useNavigate();
     const idScheda = searchParams.get("scheda");
     const [scheda, setScheda] = useState(null);
+    const [autoreValue, setAutoreValue] = useState('');
+    const [titoloValue, setTitoloValue] = useState('');
+    const [textValue, setTextValue] = useState('');
 
     useEffect(() => {
         if (idScheda) {
@@ -24,6 +32,9 @@ const FormComponent = () => {
                         const data = snapshot.val();
                         setScheda(data);
                         form.setFieldsValue(data);
+                        setAutoreValue(data.autore);
+                        setTitoloValue(data.titolo);
+                        setTextValue(data.testo);
                     } else {
                         console.log("Nessuna scheda trovata nel database");
                     }
@@ -35,16 +46,40 @@ const FormComponent = () => {
     }, [idScheda, form]);
 
     const handleSubmit = (values) => {
+        
+        if (!stripHtmlTags(autoreValue) || !stripHtmlTags(titoloValue) || !stripHtmlTags(textValue)) {
+            message.error('Assicurati di compilare tutti i campi.');
+            return;
+        }
+
+        values.autore = autoreValue;
+        values.titolo = titoloValue;
+        values.testo = textValue;
+
         const schedaRef = idScheda ? ref(db, `schede/${idScheda}`) : push(ref(db, 'schede'));
         set(schedaRef, values)
             .then(() => {
                 alert('Dati salvati nel database!');
-                navigate('/'); // Reindirizza alla homepage dopo l'alert
+                //navigate('/');
+                navigate(`/edit-scheda?scheda=${idScheda}`);
             })
             .catch((error) => {
                 console.error('Errore nel salvataggio dei dati:', error);
             });
     };
+
+    // Funzione di validazione personalizzata per campi vuoti
+    const validateEmpty = (fieldName, value) => {
+        if (!stripHtmlTags(value)) {
+            return Promise.reject(`Inserire ${fieldName}!`);
+        }
+        return Promise.resolve();
+    };
+
+    // Regole di validazione personalizzate
+    const rules = (fieldName) => [{
+        validator: (_, value) => validateEmpty(fieldName, value)
+    }];
 
     return (
         <Row justify="center">
@@ -59,23 +94,23 @@ const FormComponent = () => {
                         <Form.Item
                             label="Autore"
                             name="autore"
-                            rules={[{ required: true, message: 'Inserire autore!' }]}
+                            rules={rules("autore")}
                         >
-                            <Input />
+                            <ReactQuill value={autoreValue} onChange={setAutoreValue} />
                         </Form.Item>
                         <Form.Item
                             label="Titolo"
                             name="titolo"
-                            rules={[{ required: true, message: 'Inserire titolo!' }]}
+                            rules={rules("titolo")}
                         >
-                            <Input />
+                            <ReactQuill value={titoloValue} onChange={setTitoloValue} />
                         </Form.Item>
                         <Form.Item
                             label="Testo"
                             name="testo"
-                            rules={[{ required: true, message: 'Inserire testo!' }]}
+                            rules={rules("testo")}
                         >
-                            <Input.TextArea rows={10} />
+                            <ReactQuill value={textValue} onChange={setTextValue} />
                         </Form.Item>
                         <Divider />
                         <Form.List name="tags">

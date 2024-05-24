@@ -76,3 +76,26 @@
 .schede-list li {
     margin-bottom: 10px;
 }
+
+.quill-text-area {
+    border: none !important;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+}
+
+/* styles.css */
+.ql-no-newline .ql-formats {
+    display: none;
+}
+
+.autoreEdit-quill .ql-editor {
+    font-size: 1.5em;
+  }
+  
+  .titoloEdit-quill .ql-editor {
+    font-size: 1.8em,; 
+  }
+  

@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, Spin, Button } from "antd";
+import { Row, Col, Card, Spin, Button, Divider } from "antd";
 import { db } from './firebase';
 import { ref, get } from 'firebase/database';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import '../styles/App.css';
+
+const stripHtmlTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
 
 const AllSchede = () => {
     const [schede, setSchede] = useState([]);
@@ -21,12 +29,13 @@ const AllSchede = () => {
                         const scheda = childSnapshot.val();
                         data.push({
                             id,
-                            ...scheda
+                            ...scheda,
+                            autoreText: stripHtmlTags(scheda.autore)
                         });
                     });
 
-                    // Ordina le schede in ordine alfabetico in base all'autore
-                    data.sort((a, b) => a.autore.localeCompare(b.autore));
+                    // Ordina le schede in ordine alfabetico in base all'autore pulito
+                    data.sort((a, b) => a.autoreText.localeCompare(b.autoreText));
 
                     setSchede(data);
                     setFilteredSchede(data);
@@ -44,9 +53,9 @@ const AllSchede = () => {
 
     useEffect(() => {
         if (filter) {
-            // Filtra le schede in base alla lettera iniziale dell'autore
+            // Filtra le schede in base alla lettera iniziale dell'autore pulito
             setFilteredSchede(schede.filter(scheda => {
-                const firstLetter = scheda.autore.charAt(0).toUpperCase();
+                const firstLetter = scheda.autoreText.charAt(0).toUpperCase();
                 return filter.split('').includes(firstLetter);
             }));
         } else {
@@ -95,8 +104,24 @@ const AllSchede = () => {
                         {filteredSchede.map((scheda) => (
                             <Col xs={24} sm={12} md={8} lg={6} xl={4} key={scheda.id}>
                                 <Link to={`/edit-scheda?scheda=${scheda.id}`}>
-                                    <Card title={scheda.autore}>
-                                        <p>{scheda.titolo}</p>
+                                    <Card hoverable>
+                                        <div>
+                                            <h1 className="autore-quill">
+                                                <ReactQuill
+                                                    value={scheda.autore}
+                                                    readOnly={true}
+                                                    theme={"bubble"}
+                                                />
+                                            </h1>
+                                            <Divider />
+                                            <div className="titolo-quill">
+                                                <ReactQuill
+                                                    value={scheda.titolo}
+                                                    readOnly={true}
+                                                    theme={"bubble"}
+                                                />
+                                            </div>
+                                        </div>
                                     </Card>
                                 </Link>
                             </Col>
