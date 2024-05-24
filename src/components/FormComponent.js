@@ -57,16 +57,16 @@ const FormComponent = () => {
                         layout="vertical"
                     >
                         <Form.Item
-                            label="Titolo"
-                            name="titolo"
-                            rules={[{ required: true, message: 'Inserire titolo!' }]}
+                            label="Autore"
+                            name="autore"
+                            rules={[{ required: true, message: 'Inserire autore!' }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
-                            label="Autore"
-                            name="autore"
-                            rules={[{ required: true, message: 'Inserire autore!' }]}
+                            label="Titolo"
+                            name="titolo"
+                            rules={[{ required: true, message: 'Inserire titolo!' }]}
                         >
                             <Input />
                         </Form.Item>

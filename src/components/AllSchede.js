@@ -95,8 +95,8 @@ const AllSchede = () => {
                         {filteredSchede.map((scheda) => (
                             <Col xs={24} sm={12} md={8} lg={6} xl={4} key={scheda.id}>
                                 <Link to={`/edit-scheda?scheda=${scheda.id}`}>
-                                    <Card title={scheda.titolo}>
-                                        <p>{scheda.autore}</p>
+                                    <Card title={scheda.autore}>
+                                        <p>{scheda.titolo}</p>
                                     </Card>
                                 </Link>
                             </Col>

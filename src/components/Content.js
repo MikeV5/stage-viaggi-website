@@ -40,7 +40,8 @@ const Content = () => {
                         const { tags = [] } = scheda;
 
                         if (!chiaviCercate.every((chiaveCercata) => {
-                            return tags.some((tag) => tag.toLowerCase() === chiaveCercata);
+                            // la ricerca includerà le schede che contengono anche solo una parte del tag inserito
+                            return tags.some((tag) => tag.toLowerCase().includes(chiaveCercata));
                         }))
                             return;
 
@@ -111,13 +112,13 @@ const Content = () => {
                                     to={`/edit-scheda?scheda=${id}`}
                                 >
                                     <Card
-                                        title={titolo}
+                                        title={autore}
                                         hoverable
                                         style={{
                                             marginBottom: 8
                                         }}
                                     >
-                                        {autore}
+                                        {titolo}
                                     </Card>
                                 </Link>
                             )

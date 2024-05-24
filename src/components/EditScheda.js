@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start', // Centra verticalmente all'inizio della pagina
         //alignItems: 'center',
     },
-    title: {
+    autore: {
         //textAlign: 'center',
         //fontSize: 16,
         //fontWeight: 'bold', // Rendi il titolo in grassetto
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginVertical: 10,
     },
-    autore: {
+    title: {
       textAlign: 'justify',
       fontSize: 14,
       marginVertical: 10,
@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
 const MyDocument = ({ scheda }) => (
     <Document>
         <Page size="A4" style={styles.page}>
-            <Text style={styles.title}>{scheda.titolo}</Text>
             <Text style={styles.autore}>{scheda.autore}</Text>
+            <Text style={styles.title}>{scheda.titolo}</Text>
             <Text style={styles.text}>{scheda.testo} </Text>
         </Page>
     </Document>
@@ -86,9 +86,9 @@ const EditScheda = () => {
         <Row justify="center">
             <Col xs={24} md={12}>
                 <Card>
-                    <h2>{scheda.titolo}</h2>
+                    <h2>{scheda.autore}</h2>
                     <Divider />
-                    <p><h3>{scheda.autore}</h3></p>
+                    <p><h3>{scheda.titolo}</h3></p>
                     <Divider />
                     <p className="white-space-pre-line">{scheda.testo}</p>
                     <PDFDownloadLink document={<MyDocument scheda={scheda} />} fileName="scheda.pdf">
