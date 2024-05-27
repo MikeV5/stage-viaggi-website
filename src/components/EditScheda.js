@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Row, Col, Card, Button, Divider } from "antd";
+import { Row, Col, Card, Button, Divider, Tag } from "antd";
 import { db } from './firebase';
 import { ref, get } from 'firebase/database';
 import { PDFDownloadLink, Document, Page, Text, StyleSheet } from '@react-pdf/renderer';
@@ -119,6 +119,20 @@ const EditScheda = () => {
                                     loading ? 'Generazione PDF...' : 'Scarica PDF'
                                 }
                             </PDFDownloadLink>
+                        </div>
+                        <Divider />
+                        <div>
+                        
+                            {scheda.tags && scheda.tags.length > 0 ? (
+                                scheda.tags.map((tag, index) => (
+                                    <Tag key={index} color="gold" style={{ margin: '4px', marginLeft: '16px' }}>
+                                        {tag}
+                                    </Tag>
+                                ))
+                            ) : (
+                               
+                                <span style={{marginLeft: '16px',  color: 'red' }}>Nessun tag trovato</span>
+                            )}
                         </div>
                     </div>
                 </Card>
