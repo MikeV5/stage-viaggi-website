@@ -3,14 +3,37 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Row, Col, Card, Button, Divider, Tag } from "antd";
 import { db } from './firebase';
 import { ref, get } from 'firebase/database';
-import { PDFDownloadLink, Document, Page, Text, StyleSheet } from '@react-pdf/renderer';
+import { PDFDownloadLink, Document, Page, Text, StyleSheet, Font } from '@react-pdf/renderer';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../styles/Form.css';
 import 'react-quill/dist/quill.bubble.css';
 
+Font.register({
+    family: 'Roboto',
+    fonts: [
+      {
+        src: '/fonts/Roboto-Regular.ttf',
+      },
+      {
+        src: '/fonts/Roboto-Italic.ttf',
+        fontStyle: 'italic',
+      },
+      {
+        src: '/fonts/Roboto-Bold.ttf',
+        fontWeight: 'bold'
+      },
+      {
+        src: '/fonts/Roboto-BoldItalic.ttf',
+        fontStyle: 'italic',
+        fontWeight: 'bold'
+      },
+    ],
+  });
+
 const styles = StyleSheet.create({
     page: {
+        fontFamily: 'Roboto',
         margin: 20,
         padding: '20px 60px 20px 20px',
         display: 'flex',
@@ -18,17 +41,22 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     autore: {
+        fontFamily: 'Roboto',
         textAlign: 'justify',
         fontSize: 16,
         fontWeight: 'bold',
         marginVertical: 10,
     },
     title: {
+        fontFamily: 'Roboto',
         textAlign: 'justify',
         fontSize: 14,
+        fontStyle: 'italic', 
+        fontWeight: 'bold',
         marginVertical: 10,
     },
     text: {
+        fontFamily: 'Roboto',
         textAlign: 'justify',
         fontSize: 12,
         marginVertical: 10,
@@ -36,19 +64,38 @@ const styles = StyleSheet.create({
 });
 
 const stripHtmlTags = (html) => {
+    if (!html || !/<[a-z][\s\S]*>/i.test(html)) {
+        return html || ''; // Se non ci sono tag HTML, restituisci la stringa così com'è o una stringa vuota se html è null
+    }
+    
     const doc = new DOMParser().parseFromString(html, 'text/html');
-    return doc.body.textContent || "";
+    const paragraphs = doc.querySelectorAll('p');
+    let text = '';
+    paragraphs.forEach((p, index) => {
+        const innerText = p.textContent.trim();
+        if (innerText === '<br>') {
+            text += '\n'; // Aggiungi un salto di linea se trovi '<p><br></p>'
+        } else {
+            text += innerText;
+            if (index < paragraphs.length - 1) {
+                text += '\n'; // Aggiungi un salto di linea tra i paragrafi
+            }
+        }
+    });
+    return text;
 };
+
 
 const MyDocument = ({ scheda }) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <Text style={styles.autore}>{stripHtmlTags(scheda.autore)}</Text>
-            <Text style={styles.title}>{stripHtmlTags(scheda.titolo)}</Text>
+            <Text style={{ ...styles.title}}>{stripHtmlTags(scheda.titolo)}</Text>
             <Text style={styles.text}>{stripHtmlTags(scheda.testo)}</Text>
         </Page>
     </Document>
 );
+
 
 const EditScheda = () => {
     const [scheda, setScheda] = useState();
