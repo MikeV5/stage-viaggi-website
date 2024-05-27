@@ -80,7 +80,7 @@ const AllSchede = () => {
                 </>
             ) : (
                 <>
-                    <h1>Tutte le schede</h1>
+                    <h1>Tutte le schede ({filteredSchede.length})</h1>
                     <div style={{ marginBottom: 20 }}>
                         {['A', 'B', 'C', 'D', 'E', 'F', 'GH', 'IJK', 'L', 'M', 'N', 'O', 'PQ', 'R', 'S', 'T', 'UV', 'WX', 'YZ'].map(group => (
                             <Button

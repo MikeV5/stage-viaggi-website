@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card, Button, Input, Alert, Space, Divider } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -14,27 +14,37 @@ const stripHtmlTags = (html) => {
     return doc.body.textContent || "";
 };
 
+// Funzione debounce
+const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+};
+
 const Content = () => {
     const [cercato, setCercato] = useState(false);
     const [schede, setSchede] = useState([]);
     const [tags, setTags] = useState(['']);
-  
+
     const handleAddTag = () => {
         setTags([...tags, '']);
     };
-  
+
     const handleRemoveTag = (index) => {
         const newTags = tags.filter((_, i) => i !== index);
         setTags(newTags);
     };
-  
+
     const handleTagChange = (index, event) => {
         const newTags = [...tags];
         newTags[index] = event.target.value;
         setTags(newTags);
     };
-  
-    const handleSubmit = () => {
+
+    // Funzione di ricerca
+    const fetchSchede = useCallback(() => {
         const chiaviCercate = tags.map(tag => tag.toLowerCase()).filter(tag => tag);
 
         const schedeRef = ref(db, 'schede');
@@ -66,7 +76,15 @@ const Content = () => {
             .catch((error) => {
                 console.error("Errore nel recupero delle schede:", error);
             });
-    };
+    }, [tags]);
+
+    // Funzione debounce per la ricerca dinamica
+    const debouncedFetchSchede = useCallback(debounce(fetchSchede, 500), [fetchSchede]);
+
+    // Esegui la ricerca ogni volta che i tag cambiano
+    useEffect(() => {
+        debouncedFetchSchede();
+    }, [tags, debouncedFetchSchede]);
 
     return (
         <>
@@ -94,7 +112,7 @@ const Content = () => {
                             Aggiungi Tag
                         </Button>
                     </div>
-                    <Button type="primary" block onClick={handleSubmit} style={{ marginLeft: '8px' }}>
+                    <Button type="primary" block onClick={fetchSchede} style={{ marginLeft: '8px' }}>
                         Cerca
                     </Button>
                 </Card>
@@ -109,7 +127,7 @@ const Content = () => {
                 :
                     <>
                         <h3>
-                            Risultati ricerca:
+                            Risultati ricerca: {schede.length}
                         </h3>
                         {schede.map((scheda, index) => {
                             const { id, titolo, autore } = scheda;
@@ -154,7 +172,7 @@ const Content = () => {
             @media (max-width: 480px) {
                 img {
                     max-width: 100%;
-                    height: auto;
+                    height: auto.
                 }
             }
         `}</style>
