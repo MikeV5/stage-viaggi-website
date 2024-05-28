@@ -51,7 +51,7 @@ const Content = () => {
         get(schedeRef)
             .then((snapshot) => {
                 if (snapshot.exists()) {
-                    const data = [];
+                    let data = [];
                     snapshot.forEach((childSnapshot) => {
                         const id = childSnapshot.key;
                         const scheda = childSnapshot.val();
@@ -67,6 +67,16 @@ const Content = () => {
                             ...scheda
                         });
                     });
+
+                    // Ordina le schede per autore in ordine alfabetico
+                    data = data.sort((a, b) => {
+                        const autoreA = stripHtmlTags(a.autore).toLowerCase();
+                        const autoreB = stripHtmlTags(b.autore).toLowerCase();
+                        if (autoreA < autoreB) return -1;
+                        if (autoreA > autoreB) return 1;
+                        return 0;
+                    });
+
                     setCercato(true);
                     setSchede(data);
                 } else {
