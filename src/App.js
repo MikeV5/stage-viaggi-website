@@ -6,7 +6,7 @@ import Content from './components/Content';
 import EditScheda from './components/EditScheda';
 import Navbar from './components/Navbar';
 import FormComponent from './components/FormComponent';
-import AllSchede from './components/AllSchede'; // Importa il nuovo componente per visualizzare tutte le schede
+import AllSchede from './components/AllSchede';
 import './styles/App.css';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
                             <Route path="/" element={<Content />} />
                             <Route path="/edit-scheda" element={<EditScheda />} />
                             <Route path="/edit-form" element={<FormComponent />} />
-                            <Route path="/all-schede" element={<AllSchede />} /> {/* Nuovo percorso per visualizzare tutte le schede */}
+                            <Route path="/all-schede" element={<AllSchede />} />
                         </Routes>
                     </div>
                 </div>

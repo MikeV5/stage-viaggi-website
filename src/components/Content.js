@@ -88,10 +88,9 @@ const Content = () => {
             });
     }, [tags]);
 
-    // Funzione debounce per la ricerca dinamica
+    //Funzione debounce per la ricerca dinamica
     const debouncedFetchSchede = useCallback(debounce(fetchSchede, 500), [fetchSchede]);
-
-    // Esegui la ricerca ogni volta che i tag cambiano
+    //Esegue la ricerca ogni volta che i tag cambiano
     useEffect(() => {
         debouncedFetchSchede();
     }, [tags, debouncedFetchSchede]);
