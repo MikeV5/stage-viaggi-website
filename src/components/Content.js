@@ -136,7 +136,7 @@ const Content = () => {
                 :
                     <>
                         <h3>
-                            Risultati ricerca: {schede.length}
+                            Risultati ricerca333: {schede.length}
                         </h3>
                         {schede.map((scheda, index) => {
                             const { id, titolo, autore } = scheda;
