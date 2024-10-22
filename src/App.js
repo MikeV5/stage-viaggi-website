@@ -7,6 +7,7 @@ import EditScheda from './components/EditScheda';
 import Navbar from './components/Navbar';
 import FormComponent from './components/FormComponent';
 import AllSchede from './components/AllSchede';
+import LoginForm from './components/LoginForm';
 import './styles/App.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                             <Route path="/edit-scheda" element={<EditScheda />} />
                             <Route path="/edit-form" element={<FormComponent />} />
                             <Route path="/all-schede" element={<AllSchede />} />
+                            <Route path="/login" element={<LoginForm />} />
                         </Routes>
                     </div>
                 </div>
