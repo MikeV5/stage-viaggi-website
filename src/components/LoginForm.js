@@ -1,28 +1,43 @@
-import React from "react";
-import { Button, Checkbox, Form, Grid, Input, Card, theme, Typography } from "antd";
+import React, { useState } from "react";
+import { Button, Checkbox, Form, Grid, Input, Card, theme, Typography, message, Alert } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom"; // Per reindirizzare dopo il login
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from './firebase'; // Importa l'autenticazione di Firebase
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
 
-export default function App() {
+export default function LoginForm() {
   const { token } = useToken();
   const screens = useBreakpoint();
+  const navigate = useNavigate(); // Usa il navigatore per il redirect
+  const [errorMessage, setErrorMessage] = useState(null); // Per gestire gli errori
 
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    const { email, password } = values;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Login riuscito
+        console.log("Login effettuato: ", userCredential.user);
+        navigate("/"); // Reindirizza all'homepage
+      })
+      .catch((error) => {
+        // Mostra un errore se il login fallisce
+        console.error("Errore di login: ", error.message);
+        message.error("Errore di login, riprova."); // Alert per il fallimento
+      });
   };
 
   const styles = {
     section: {
       display: "flex",
       justifyContent: "center", // Centra il form orizzontalmente
-     // paddingTop: "50px", // Aggiungi spazio dall'alto
-     alignItems: "center",
+      alignItems: "center",
       backgroundColor: token.colorBgContainer,
       padding: screens.md ? `${token.sizeXXL}px 0px` : "0px",
-      //height: "100vh", // Imposta l'altezza a 100vh per garantire il corretto allineamento
     },
     card: {
       width: "100%",
@@ -47,7 +62,7 @@ export default function App() {
       fontSize: screens.md ? token.fontSizeHeading2 : token.fontSizeHeading3,
     },
   };
-  
+
   return (
     <section style={styles.section}>
       <Card style={styles.card}>
@@ -66,8 +81,10 @@ export default function App() {
           </svg>
 
           <Title style={styles.title}>Log in</Title>
-       
         </div>
+
+        {/* Mostra un messaggio di errore se il login fallisce */}
+        {errorMessage && <Alert message={errorMessage} type="error" showIcon />}
 
         <Form
           name="normal_login"
@@ -115,7 +132,7 @@ export default function App() {
             </Button>
             <div style={styles.footer}>
               <Text style={styles.text}>Non sei registrato?</Text>{" "}
-              <Link href="">Registrati</Link>
+              <Link href="/register">Registrati</Link>
             </div>
           </Form.Item>
         </Form>
