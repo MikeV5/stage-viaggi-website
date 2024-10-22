@@ -3,10 +3,6 @@
 ## Descrizione
 Questo progetto di tirocinio, sviluppato come parte del corso di laurea in Informatica presso l'Università degli Studi dell'Insubria, si concentra sulla creazione di un sito web dedicato alla storia del viaggio, con un focus specifico sull'area lombarda. Il sito include la realizzazione di un database e l'organizzazione di schede cartacee dedicate ai viaggi.
 
-## Autori
-- Ashley Chudory
-- Miguel Valerio
-
 ## Obiettivi del Progetto
 - Sviluppo di un sito web interattivo per esplorare la storia del viaggio nell'area lombarda.
 - Creazione di un database per archiviare informazioni sui viaggi e le opere correlate.
