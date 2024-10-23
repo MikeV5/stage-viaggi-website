@@ -143,7 +143,7 @@ const Content = () => {
                         </Button>
                     </div>
                     <Button type="primary" block onClick={fetchSchede} style={{ marginLeft: '8px' }}>
-                        Cerca
+                        Cercaaaaaaaa
                     </Button>
                 </Card>
             </Col>
