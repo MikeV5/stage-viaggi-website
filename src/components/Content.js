@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card, Button, Input, Alert, Space, Divider } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { db } from './firebase';
+import { db, auth } from './firebase'; // Assicurati di importare auth da firebase
 import { ref, get } from 'firebase/database';
+import { onAuthStateChanged } from 'firebase/auth'; // Importa onAuthStateChanged
 import logo from '../styles/logo_sito.jpg';  // Importa il logo
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -27,6 +28,7 @@ const Content = () => {
     const [cercato, setCercato] = useState(false);
     const [schede, setSchede] = useState([]);
     const [tags, setTags] = useState(['']);
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Stato per l'autenticazione
 
     const handleAddTag = () => {
         setTags([...tags, '']);
@@ -41,6 +43,22 @@ const Content = () => {
         const newTags = [...tags];
         newTags[index] = event.target.value;
         setTags(newTags);
+    };
+
+    // Controlla lo stato di autenticazione dell'utente
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setIsLoggedIn(!!user); // Imposta lo stato in base alla presenza dell'utente
+        });
+        return () => unsubscribe(); // Pulisci l'evento all'unmount
+    }, []);
+
+    const handleAuthCheck = () => {
+        if (isLoggedIn) {
+            alert("Sei loggato!");
+        } else {
+            alert("Non sei loggato!");
+        }
     };
 
     // Funzione di ricerca
@@ -100,6 +118,9 @@ const Content = () => {
         <Row justify="center">
             <Col xs={24} md={12}>
                 <div style={{ textAlign: 'center' }}>
+                    <Button type="primary" style={{ marginBottom: '16px' }} onClick={handleAuthCheck}>
+                        Controlla Stato
+                    </Button>
                     <img src={logo} alt="Logo del sito" style={{ maxWidth: '100%', height: 'auto' }} />
                 </div>
                 <Card>
@@ -122,7 +143,7 @@ const Content = () => {
                         </Button>
                     </div>
                     <Button type="primary" block onClick={fetchSchede} style={{ marginLeft: '8px' }}>
-                        Cerca333
+                        Cerca
                     </Button>
                 </Card>
             </Col>
@@ -136,7 +157,7 @@ const Content = () => {
                 :
                     <>
                         <h3>
-                            Risultati ricerca333: {schede.length}
+                            Risultati ricerca: {schede.length}
                         </h3>
                         {schede.map((scheda, index) => {
                             const { id, titolo, autore } = scheda;

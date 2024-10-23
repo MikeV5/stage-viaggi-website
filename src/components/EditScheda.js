@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Row, Col, Card, Button, Divider, Tag } from "antd";
-import { db } from './firebase';
+import { db, auth } from './firebase'; // Importa auth da firebase
 import { ref, get } from 'firebase/database';
+import { onAuthStateChanged } from 'firebase/auth'; // Importa onAuthStateChanged
 import { PDFDownloadLink, Document, Page, Text, StyleSheet, Font } from '@react-pdf/renderer';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -29,7 +30,7 @@ Font.register({
         fontWeight: 'bold'
       },
     ],
-  });
+});
 
 const styles = StyleSheet.create({
     page: {
@@ -85,7 +86,6 @@ const stripHtmlTags = (html) => {
     return text;
 };
 
-
 const MyDocument = ({ scheda }) => (
     <Document>
         <Page size="A4" style={styles.page}>
@@ -96,12 +96,19 @@ const MyDocument = ({ scheda }) => (
     </Document>
 );
 
-
 const EditScheda = () => {
     const [scheda, setScheda] = useState();
     const [searchParams] = useSearchParams();
     const idScheda = searchParams.get("scheda");
     const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Stato per l'autenticazione
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setIsLoggedIn(!!user); // Imposta lo stato in base alla presenza dell'utente
+        });
+        return () => unsubscribe(); // Pulisci l'evento all'unmount
+    }, []);
 
     useEffect(() => {
         const schedeRef = ref(db, 'schede');
@@ -169,7 +176,6 @@ const EditScheda = () => {
                         </div>
                         <Divider />
                         <div>
-                        
                             {scheda.tags && scheda.tags.length > 0 ? (
                                 scheda.tags.map((tag, index) => (
                                     <Tag key={index} color="gold" style={{ margin: '4px', marginLeft: '16px' }}>
@@ -177,15 +183,16 @@ const EditScheda = () => {
                                     </Tag>
                                 ))
                             ) : (
-                               
                                 <span style={{marginLeft: '16px',  color: 'red' }}>Nessun tag trovato</span>
                             )}
                         </div>
                     </div>
                 </Card>
-                <Button style={{ marginTop: 16 }} onClick={handleEditClick}>
-                    Modifica
-                </Button>
+                {isLoggedIn && ( // Mostra il pulsante solo se l'utente è loggato
+                    <Button style={{ marginTop: 16 }} onClick={handleEditClick}>
+                        Modifica
+                    </Button>
+                )}
             </Col>
         </Row>
     );
