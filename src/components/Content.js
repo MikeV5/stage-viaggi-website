@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, Button, Input, Alert, Space, Divider } from "antd";
+import { Row, Col, Card, Button, Input, Alert, Space, Divider, message } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { db, auth } from './firebase'; // Assicurati di importare auth da firebase
 import { ref, get } from 'firebase/database';
@@ -29,6 +29,7 @@ const Content = () => {
     const [schede, setSchede] = useState([]);
     const [tags, setTags] = useState(['']);
     const [isLoggedIn, setIsLoggedIn] = useState(false); // Stato per l'autenticazione
+    const [errorMessage, setErrorMessage] = useState(null); // Per gestire gli errori
 
     const handleAddTag = () => {
         setTags([...tags, '']);
@@ -49,15 +50,19 @@ const Content = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setIsLoggedIn(!!user); // Imposta lo stato in base alla presenza dell'utente
+            //setCurrentUser(user);  // Imposta l'utente autenticato nello stato
         });
         return () => unsubscribe(); // Pulisci l'evento all'unmount
     }, []);
 
     const handleAuthCheck = () => {
+        message.destroy(); // Elimina tutti i messaggi attivi prima di mostrarne uno nuovo
+
         if (isLoggedIn) {
-            alert("Sei loggato!");
+            const currentUser = auth.currentUser; // Ottieni l'utente corrente da Firebase
+            message.success(`Sei loggato come: ${currentUser.email}`); // Messaggio di successo con email
         } else {
-            alert("Non sei loggato!");
+            message.error("Errore di login, riprova."); // Messaggio di errore se non loggato
         }
     };
 
@@ -115,6 +120,7 @@ const Content = () => {
 
     return (
         <>
+         
         <Row justify="center">
             <Col xs={24} md={12}>
                 <div style={{ textAlign: 'center' }}>
@@ -123,6 +129,8 @@ const Content = () => {
                     </Button>
                     <img src={logo} alt="Logo del sito" style={{ maxWidth: '100%', height: 'auto' }} />
                 </div>
+             {/* Mostra un messaggio di errore se il login fallisce */}
+         {errorMessage && <Alert message={errorMessage} type="error" showIcon />}
                 <Card>
                     <div style={{ marginBottom: 16 }}>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -143,7 +151,7 @@ const Content = () => {
                         </Button>
                     </div>
                     <Button type="primary" block onClick={fetchSchede} style={{ marginLeft: '8px' }}>
-                        Cercaaaaaaaa
+                        Cerca
                     </Button>
                 </Card>
             </Col>

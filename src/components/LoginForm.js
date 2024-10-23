@@ -14,6 +14,7 @@ export default function LoginForm() {
   const screens = useBreakpoint();
   const navigate = useNavigate(); // Usa il navigatore per il redirect
   const [errorMessage, setErrorMessage] = useState(null); // Per gestire gli errori
+ 
 
   const onFinish = (values) => {
     const { email, password } = values;
@@ -26,6 +27,7 @@ export default function LoginForm() {
       })
       .catch((error) => {
         // Mostra un errore se il login fallisce
+        message.destroy(); // Elimina tutti i messaggi attivi prima di mostrarne uno nuovo
         console.error("Errore di login: ", error.message);
         message.error("Errore di login, riprova."); // Alert per il fallimento
       });
