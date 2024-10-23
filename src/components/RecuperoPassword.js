@@ -1,35 +1,34 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Form, Grid, Input, Card, theme, Typography, message, Alert } from "antd";
-import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom"; // Per reindirizzare dopo il login
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { Button, Form, Grid, Input, Card, theme, Typography, message, Alert } from "antd";
+import { MailOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom"; // Per reindirizzare dopo il reset
+import { sendPasswordResetEmail } from "firebase/auth"; // Importa la funzione di reset della password
 import { auth } from './firebase'; // Importa l'autenticazione di Firebase
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
 
-export default function LoginForm() {
+export default function RecuperoPassword() {
   const { token } = useToken();
   const screens = useBreakpoint();
   const navigate = useNavigate(); // Usa il navigatore per il redirect
   const [errorMessage, setErrorMessage] = useState(null); // Per gestire gli errori
- 
+  const [successMessage, setSuccessMessage] = useState(null); // Per gestire i successi
 
   const onFinish = (values) => {
-    const { email, password } = values;
+    const { email } = values;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Login riuscito
-        console.log("Login effettuato: ", userCredential.user);
-        navigate("/"); // Reindirizza all'homepage
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setSuccessMessage("Email per il reset della password inviata!");
+        message.success("Controlla la tua email per reimpostare la password.");
       })
       .catch((error) => {
-        // Mostra un errore se il login fallisce
-        message.destroy(); // Elimina tutti i messaggi attivi prima di mostrarne uno nuovo
-        console.error("Errore di login: ", error.message);
-        message.error("Errore di login, riprova."); // Alert per il fallimento
+        message.destroy(); // Elimina i messaggi precedenti
+        console.error("Errore nel reset della password: ", error.message);
+        message.error("Errore nel reset della password, riprova.");
+        setErrorMessage("Errore nel reset della password, riprova.");
       });
   };
 
@@ -54,9 +53,6 @@ export default function LoginForm() {
       marginTop: token.marginLG,
       textAlign: "center",
     },
-    forgotPassword: {
-      float: "right",
-    },
     text: {
       color: token.colorTextSecondary,
     },
@@ -69,7 +65,7 @@ export default function LoginForm() {
     <section style={styles.section}>
       <Card style={styles.card}>
         <div style={styles.header}>
-          <svg
+        <svg    //icon
             width="25"
             height="24"
             viewBox="0 0 25 24"
@@ -81,15 +77,17 @@ export default function LoginForm() {
             <path d="M10.0643 9.6001H14.8643V14.4001H10.0643V9.6001Z" fill="white" />
             <path d="M4.06427 13.2001H11.2643V20.4001H4.06427V13.2001Z" fill="white" />
           </svg>
-
-          <Title style={styles.title}>Log in</Title>
+          <Title style={styles.title}>Recupero Password</Title>
         </div>
 
-        {/* Mostra un messaggio di errore se il login fallisce */}
+        {/* Mostra un messaggio di errore se il reset fallisce */}
         {errorMessage && <Alert message={errorMessage} type="error" showIcon />}
+        
+        {/* Mostra un messaggio di successo se il reset ha successo */}
+        {successMessage && <Alert message={successMessage} type="success" showIcon />}
 
         <Form
-          name="normal_login"
+          name="recupero_password"
           initialValues={{
             remember: true,
           }}
@@ -109,32 +107,13 @@ export default function LoginForm() {
           >
             <Input prefix={<MailOutlined />} placeholder="Email" />
           </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Inserisci la tua password!",
-              },
-            ]}
-          >
-            <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" />
-          </Form.Item>
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Ricordami</Checkbox>
-            </Form.Item>
-            <a style={styles.forgotPassword} href="/recupero-password">
-              Password dimenticata?
-            </a>
-          </Form.Item>
           <Form.Item style={{ marginBottom: "0px" }}>
             <Button block type="primary" htmlType="submit">
-              Log in
+              Reset Password
             </Button>
             <div style={styles.footer}>
-              <Text style={styles.text}>Non sei registrato?</Text>{" "}
-              <Link href="/register">Registrati</Link>
+              <Text style={styles.text}>Ricordi la tua password?</Text>{" "}
+              <Link href="/login">Accedi</Link>
             </div>
           </Form.Item>
         </Form>

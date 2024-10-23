@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form, Grid, Input, Card, theme, Typography, message } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { createUserWithEmailAndPassword } from "firebase/auth"; // Importiamo la funzione di Firebase
+import { useNavigate } from "react-router-dom"; // Per reindirizzare dopo il login
 import { auth } from './firebase'; // Importa l'auth configurato
 
 const { useToken } = theme;
@@ -11,6 +12,7 @@ const { Text, Title, Link } = Typography;
 export default function SignUpPage() {
   const { token } = useToken();
   const screens = useBreakpoint();
+  const navigate = useNavigate(); // Usa il navigatore per il redirect
 
   const onFinish = async (values) => {
     const { email, password } = values;
@@ -20,9 +22,10 @@ export default function SignUpPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log("User registered:", user);
-      
       // Mostra un messaggio di successo
       message.success("Registrazione avvenuta con successo!");
+      navigate("/"); // Reindirizza all'homepage
+
     } catch (error) {
       console.error("Errore nella registrazione:", error);
       // Mostra un messaggio di errore

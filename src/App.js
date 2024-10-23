@@ -9,6 +9,7 @@ import FormComponent from './components/FormComponent';
 import AllSchede from './components/AllSchede';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import RecuperoPassword from './components/RecuperoPassword';
 import './styles/App.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                             <Route path="/all-schede" element={<AllSchede />} />
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="/register" element={<RegisterForm />} />
+                            <Route path="/recupero-password" element={<RecuperoPassword />} />
                         </Routes>
                     </div>
                 </div>
