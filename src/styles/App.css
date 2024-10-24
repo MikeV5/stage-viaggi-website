@@ -2,42 +2,48 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
+  background: #283048;  /* sfondo principale */
+  background: -webkit-linear-gradient(to right, #859398, #283048);
+  background: linear-gradient(to right, #859398, #283048); 
 }
 
 /* Stili per il contenuto principale */
 .main-content {
   padding: 20px;
+  color: white; /* Colore del testo principale */
 }
 
-.search-bar {
-  margin-bottom: 20px;
-}
-
-.search-bar form {
-  display: flex;
-}
-
-.search-bar input[type="text"] {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-.search-bar button[type="submit"] {
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
+/* Stili per i pulsanti */
+.ant-btn-primary {
+  background-color: rgba(30, 35, 50, 0.5); /* Blu navy per i pulsanti principali */
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: 10px; /* Aggiunto margine sinistro */
 }
 
-.search-bar button[type="submit"]:hover {
-  background-color: #45a049;
+.ant-btn-primary:hover {
+  background-color: rgba(255, 0, 0, 0.8); /* Blu navy con trasparenza al passaggio del mouse */
 }
+
+/* Stili per i pulsanti secondari */
+.ant-btn-default {
+  background-color: transparent; /* Trasparente per pulsanti secondari */
+  border: 1px solid #ffffff; /* Bordo bianco */
+  color: white; /* Colore del testo */
+}
+
+.ant-btn-default:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Leggero colore al passaggio del mouse */
+}
+
+.ant-btn-dashed {
+  background-color: rgba(30, 58, 95, 0.7); /* Un blu navy più scuro con opacità */
+  border: none;
+  color: white; /* Colore del testo */
+}
+
+ant-btn-dashed:hover {
+  background-color: rgba(168, 20, 20, 0.938); /* Leggero colore al passaggio del mouse */
+}
+
 
 /* Stili per il contenuto specifico */
 .content {
@@ -46,13 +52,14 @@ body {
 
 .content h1 {
   margin-top: 0;
+  color: #ffffff; /* Colore dei titoli */
 }
 
 .white-space-pre-line {
   white-space: pre-line;
 }
 
-
+/* Stili per il Quill Editor su TutteSchede (AllSchede.js)*/
 .autore-quill .ql-editor {
   font-size: 16px; 
   font-weight: 'bold',
@@ -65,8 +72,29 @@ body {
 
 .autoreEdit-quill .ql-editor {
   font-size: 1.5em;
+  color: white, /* Colore del testo */
 }
 
 .titoloEdit-quill .ql-editor {
   font-size: 1.17em; 
+  color: white, /* Colore del testo */
 }
+
+/* Stili per le schede */
+.custom-card {
+  background-color: transparent; /* Rendi lo sfondo trasparente */
+  /*border: 1px solid rgba(255, 255, 255, 0.7); /* Bordo semi-trasparente */
+  border: 1px solid #859398; /* Bordo inferiore grigio */
+  color: white; /* Colore del testo */
+}
+
+.custom-card-search {
+  background-color: transparent; /* Rendi lo sfondo trasparente */
+  border: 1px solid #859398; /* Bordo semi-trasparente */
+  color: white; /* Colore del testo */
+}
+
+.custom-card .ant-card-body {
+  padding: 16px; /* Imposta un padding interno per il contenuto della card */
+}
+

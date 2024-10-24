@@ -1,27 +1,59 @@
-.navbar {
-    background-color: #333;
-    padding: 1em;
+.navbar-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    background: transparent; /* Sfondo trasparente */
+    border-bottom: 1px solid #859398; /* Bordo inferiore grigio */
 }
 
-.navbar-links {
-    list-style: none;
+.navbar-menu {
+    flex: 1;
+    justify-content: center; /* Centra gli item del menu */
     display: flex;
-    gap: 1em;
+    background: transparent; /* Rendi il background della navbar trasparente */
 }
 
-.navbar-links li {
-    margin: 0;
+.navbar-menu .ant-menu-item {
+    color: white; /* Colore del testo degli item */
+    padding: 10px 15px; /* Aggiunge il padding intorno al testo all'interno degli item */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Aggiunge transizioni per l'effetto hover */
 }
 
-.navbar-links a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5em 1em;
+.navbar-menu .ant-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Colore di sfondo chiaro al passaggio del mouse */
+    color: #f0f0f0; /* Colore del testo al passaggio del mouse */
+    transform: translateY(-2px); /* Solleva l'elemento quando ci si passa sopra */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aggiunge un'ombra per l'effetto di rialzo */
 }
 
-.navbar-links a:hover {
-    background-color: #555;
-    border-radius: 5px;
+.navbar-menu .ant-menu-item:active {
+    background-color: rgba(255, 255, 255, 0.3); /* Colore di sfondo più scuro quando l'elemento è attivo */
+    transform: translateY(0); /* Riporta l'elemento nella posizione originale */
+    box-shadow: none; /* Rimuove l'ombra quando è attivo */
 }
+
+.navbar-menu .ant-menu-item-selected {
+    background-color: rgba(30, 35, 50, 0.5) !important; /* Blu notte */
+
+    color: white !important; /* Mantiene il testo bianco anche se selezionato */
+    transform: translateY(-2px); /* Solleva l'elemento selezionato */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aggiunge un'ombra per l'elemento selezionato */
+}
+
+
+.navbar-buttons {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Allinea i pulsanti a destra */
+}
+
+.navbar-buttons .ant-btn {
+    height: 40px; /* Imposta un'altezza uniforme per il pulsante */
+    padding: 0 20px; /* Aggiunge padding orizzontale per una larghezza adeguata */
+    font-size: 16px; /* Imposta una dimensione del font per una migliore leggibilità */
+}
+
+/* Se vuoi aggiungere margini ai pulsanti */
+.navbar-buttons .ant-btn + .ant-btn {
+    margin-left: 10px; /* Aggiunge margine tra i pulsanti se ce ne sono più di uno */
+}
+

@@ -5,7 +5,7 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { db, auth } from './firebase'; // Assicurati di importare auth da firebase
 import { ref, get } from 'firebase/database';
 import { onAuthStateChanged } from 'firebase/auth'; // Importa onAuthStateChanged
-import logo from '../styles/logo_sito.jpg';  // Importa il logo
+import logo from '../styles/logo_sito_2.png';  // Importa il logo
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../styles/App.css';
@@ -123,34 +123,38 @@ const Content = () => {
          
         <Row justify="center">
             <Col xs={24} md={12}>
-                <div style={{ textAlign: 'center' }}>
-                    <Button type="primary" style={{ marginBottom: '16px' }} onClick={handleAuthCheck}>
+            <div style={{ textAlign: 'center' }}>
+                    <Button type="primary" style={{ marginBottom: '16px'}} onClick={handleAuthCheck}>
                         Controlla Stato
                     </Button>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+    
                     <img src={logo} alt="Logo del sito" style={{ maxWidth: '100%', height: 'auto' }} />
                 </div>
              {/* Mostra un messaggio di errore se il login fallisce */}
          {errorMessage && <Alert message={errorMessage} type="error" showIcon />}
-                <Card>
+                <Card className="custom-card-search">
                     <div style={{ marginBottom: 16 }}>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                             {tags.map((tag, index) => (
                                 <Space key={index} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                    <Input
+                                    <Input 
                                         placeholder="Tag"
                                         value={tag}
                                         onChange={(e) => handleTagChange(index, e)}
-                                        style={{ width: '200px' }}
+                                        style={{ width: '200px',background:' white', border: 'none', color:'black' }}
                                     />
                                     <MinusCircleOutlined onClick={() => handleRemoveTag(index)} />
                                 </Space>
                             ))}
                         </div>
-                        <Button type="dashed" onClick={handleAddTag} block icon={<PlusOutlined />}>
+                        
+                    </div>
+                    <Button type="dashed" onClick={handleAddTag} style={{ marginBottom: '8px' }} block icon={<PlusOutlined /> }>
                             Aggiungi Tag
                         </Button>
-                    </div>
-                    <Button type="primary" block onClick={fetchSchede} style={{ marginLeft: '8px' }}>
+                    <Button type="primary" block onClick={fetchSchede}>
                         Cerca
                     </Button>
                 </Card>
@@ -164,7 +168,7 @@ const Content = () => {
                 <Alert message="Nessun risultato trovato" type="error" />
                 :
                     <>
-                        <h3>
+                        <h3 style={{ color: 'rgba(30, 35, 50)' }}>
                             Risultati ricerca: {schede.length}
                         </h3>
                         {schede.map((scheda, index) => {
@@ -172,7 +176,7 @@ const Content = () => {
                             return (
                                 <div key={index} style={{ marginBottom: '2px' }}> {/* Contenitore esterno con margine inferiore */}
                                 <Link to={`/edit-scheda?scheda=${id}`}>
-                                <Card hoverable>
+                                <Card hoverable className="custom-card"> {/* Aggiungi la classe custom-card */}
                                 <div style={{ padding: '0px 0px 0px 0px' }}> {/* Aggiunto padding orizzontale */}
                                             <h1 className="autore-quill">
                                                 <ReactQuill

@@ -85,7 +85,7 @@ const FormComponent = () => {
         <Row justify="center">
             <Col xs={24} md={12}>
                 <Card title="Inserire Informazioni">
-                    <Form
+                    <Form 
                         form={form}
                         onFinish={handleSubmit}
                         autoComplete="off"

@@ -4,6 +4,7 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom"; // Per reindirizzare dopo il login
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from './firebase'; // Importa l'autenticazione di Firebase
+import '../styles/App.css';
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
