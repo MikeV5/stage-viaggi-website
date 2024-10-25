@@ -89,13 +89,16 @@
 /* styles.css */
 .ql-no-newline .ql-formats {
     display: none;
+    color:black;
 }
 
 .autoreEdit-quill .ql-editor {
     font-size: 1.5em;
+    color: black;
   }
   
   .titoloEdit-quill .ql-editor {
-    font-size: 1.8em,; 
+    font-size: 1.8em; 
+    color: black;
   }
   

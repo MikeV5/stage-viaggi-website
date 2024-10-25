@@ -96,12 +96,10 @@ ant-btn-dashed:hover {
 
 .autoreEdit-quill .ql-editor {
   font-size: 1.5em;
-  color: white; /* Colore del testo */
 }
 
 .titoloEdit-quill .ql-editor {
   font-size: 1.17em;
-  color: white; /* Colore del testo */
 }
 
 /* Stili per le schede */
