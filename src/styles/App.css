@@ -2,9 +2,9 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background: #283048;  /* sfondo principale */
+  background: #283048; /* sfondo principale */
   background: -webkit-linear-gradient(to right, #859398, #283048);
-  background: linear-gradient(to right, #859398, #283048); 
+  background: linear-gradient(to right, #859398, #283048);
 }
 
 /* Stili per il contenuto principale */
@@ -15,12 +15,22 @@ body {
 
 /* Stili per i pulsanti */
 .ant-btn-primary {
-  background-color: rgba(30, 35, 50, 0.5); /* Blu navy per i pulsanti principali */
+  background-color: rgba(
+    30,
+    35,
+    50,
+    0.5
+  ); /* Blu navy per i pulsanti principali */
   border: none;
 }
 
 .ant-btn-primary:hover {
-  background-color: rgba(255, 0, 0, 0.8); /* Blu navy con trasparenza al passaggio del mouse */
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.8
+  ); /* Blu navy con trasparenza al passaggio del mouse */
 }
 
 /* Stili per i pulsanti secondari */
@@ -31,19 +41,33 @@ body {
 }
 
 .ant-btn-default:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Leggero colore al passaggio del mouse */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Leggero colore al passaggio del mouse */
 }
 
 .ant-btn-dashed {
-  background-color: rgba(30, 58, 95, 0.7); /* Un blu navy più scuro con opacità */
+  background-color: rgba(
+    30,
+    58,
+    95,
+    0.7
+  ); /* Un blu navy più scuro con opacità */
   border: none;
   color: white; /* Colore del testo */
 }
 
 ant-btn-dashed:hover {
-  background-color: rgba(168, 20, 20, 0.938); /* Leggero colore al passaggio del mouse */
+  background-color: rgba(
+    168,
+    20,
+    20,
+    0.938
+  ); /* Leggero colore al passaggio del mouse */
 }
-
 
 /* Stili per il contenuto specifico */
 .content {
@@ -61,23 +85,23 @@ ant-btn-dashed:hover {
 
 /* Stili per il Quill Editor su TutteSchede (AllSchede.js)*/
 .autore-quill .ql-editor {
-  font-size: 16px; 
-  font-weight: 'bold',
+  font-size: 16px;
+  font-weight: "bold";
 }
 
 .titolo-quill .ql-editor {
   font-size: 14px;
-  font-weight: 'bold',
+  font-weight: "bold";
 }
 
 .autoreEdit-quill .ql-editor {
   font-size: 1.5em;
-  color: white, /* Colore del testo */
+  color: white; /* Colore del testo */
 }
 
 .titoloEdit-quill .ql-editor {
-  font-size: 1.17em; 
-  color: white, /* Colore del testo */
+  font-size: 1.17em;
+  color: white; /* Colore del testo */
 }
 
 /* Stili per le schede */
@@ -124,12 +148,11 @@ ant-btn-dashed:hover {
   padding: 16px;
 }
 
-
 /* Stile per la sezione autore */
 .autore-quill .ql-editor {
   font-size: 16px;
   max-height: 60px; /* Altezza massima per limitare lo spazio */
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis; /* Mostra '...' quando il testo è troppo lungo */
   display: -webkit-box; /* Necessario per il supporto dei puntini di sospensione */
   -webkit-box-orient: vertical; /* Orienta il box verticalmente */
@@ -140,7 +163,7 @@ ant-btn-dashed:hover {
 .titolo-quill .ql-editor {
   font-size: 14px;
   max-height: 50px; /* Altezza massima per limitare lo spazio */
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis; /* Mostra '...' quando il testo è troppo lungo */
   display: -webkit-box; /* Necessario per il supporto dei puntini di sospensione */
   -webkit-box-orient: vertical; /* Orienta il box verticalmente */

@@ -219,14 +219,14 @@ const EditScheda = () => {
                                 <span style={{ marginLeft: '16px', color: 'red' }}>Nessun tag trovato</span>
                             )}
                         </div>
-                         {/* Aggiungi la data di creazione qui */}
-                    <div style={{ textAlign: 'right', marginTop: 16, fontSize: '12px', color: '#888' }}>
-                        {scheda.data ? `Creato: ${formatData(scheda.data)}` : ''}
-                    </div>
-                      {/* Aggiungi la data di creazione qui */}
-                      <div style={{ textAlign: 'right', marginTop: 16, fontSize: '12px', color: '#888' }}>
-                        {scheda.dataLastModifica ? `Ultima modifica: ${formatData(scheda.dataLastModifica)}` : ''}
-                    </div>
+                        {/* Aggiungi la data di creazione qui */}
+                        <div style={{ textAlign: 'right', marginTop: 16, fontSize: '12px', color: '#888' }}>
+                            {scheda.data ? `Creato: ${formatData(scheda.data)}` : ''}
+                        </div>
+                        {/* Aggiungi la data di creazione qui */}
+                        <div style={{ textAlign: 'right', marginTop: 16, fontSize: '12px', color: '#888' }}>
+                            {scheda.dataLastModifica ? `Ultima modifica: ${formatData(scheda.dataLastModifica)}` : ''}
+                        </div>
                     </div>
                 </Card>
                 {isLoggedIn && (

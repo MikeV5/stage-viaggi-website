@@ -46,7 +46,7 @@ const Content = () => {
         setTags(newTags);
     };
 
-    // Controlla lo stato di autenticazione dell'utente
+    // Controlla lo stato di autenticazione dell'utente (attualmente tolto il pulsante per controllare lo stato)
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setIsLoggedIn(!!user); // Imposta lo stato in base alla presenza dell'utente
@@ -86,7 +86,7 @@ const Content = () => {
                             return;
 
                         data.push({
-                            id, 
+                            id,
                             ...scheda
                         });
                     });
@@ -120,91 +120,92 @@ const Content = () => {
 
     return (
         <>
-         
-        <Row justify="center">
-            <Col xs={24} md={12}>
+
+            <Row justify="center">
+                <Col xs={24} md={12}>
+                    {/* Pulsante di test per controllare lo stato del login
             <div style={{ textAlign: 'center' }}>
                     <Button type="primary" style={{ marginBottom: '16px'}} onClick={handleAuthCheck}>
                         Controlla Stato
                     </Button>
                 </div>
-                <div style={{ textAlign: 'center' }}>
-    
-                    <img src={logo} alt="Logo del sito" style={{ maxWidth: '100%', height: 'auto' }} />
-                </div>
-             {/* Mostra un messaggio di errore se il login fallisce */}
-         {errorMessage && <Alert message={errorMessage} type="error" showIcon />}
-                <Card className="custom-card-search">
-                    <div style={{ marginBottom: 16 }}>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                            {tags.map((tag, index) => (
-                                <Space key={index} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                    <Input 
-                                        placeholder="Tag"
-                                        value={tag}
-                                        onChange={(e) => handleTagChange(index, e)}
-                                        style={{ width: '200px',background:' white', border: 'none', color:'black' }}
-                                    />
-                                    <MinusCircleOutlined onClick={() => handleRemoveTag(index)} />
-                                </Space>
-                            ))}
-                        </div>
-                        
+                */}
+                    <div style={{ textAlign: 'center' }}>
+                        <img src={logo} alt="Logo del sito" style={{ maxWidth: '100%', height: 'auto' }} />
                     </div>
-                    <Button type="dashed" onClick={handleAddTag} style={{ marginBottom: '8px' }} block icon={<PlusOutlined /> }>
+                    {/* Mostra un messaggio di errore se il login fallisce */}
+                    {errorMessage && <Alert message={errorMessage} type="error" showIcon />}
+                    <Card className="custom-card-search">
+                        <div style={{ marginBottom: 16 }}>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                {tags.map((tag, index) => (
+                                    <Space key={index} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                        <Input
+                                            placeholder="Tag"
+                                            value={tag}
+                                            onChange={(e) => handleTagChange(index, e)}
+                                            style={{ width: '200px', background: ' white', border: 'none', color: 'black' }}
+                                        />
+                                        <MinusCircleOutlined onClick={() => handleRemoveTag(index)} />
+                                    </Space>
+                                ))}
+                            </div>
+
+                        </div>
+                        <Button type="dashed" onClick={handleAddTag} style={{ marginBottom: '8px' }} block icon={<PlusOutlined />}>
                             Aggiungi Tag
                         </Button>
-                    <Button type="primary" block onClick={fetchSchede}>
-                        Cerca
-                    </Button>
-                </Card>
-            </Col>
-        </Row>
-        {cercato &&
-        <Row justify="center" style={{ marginTop: 16 }}>
-            <Col xs={24} md={12}>
-                {!schede.length
-                ?
-                <Alert message="Nessun risultato trovato" type="error" />
-                :
-                    <>
-                        <h3 style={{ color: 'rgba(30, 35, 50)' }}>
-                            Risultati ricerca: {schede.length}
-                        </h3>
-                        {schede.map((scheda, index) => {
-                            const { id, titolo, autore } = scheda;
-                            return (
-                                <div key={index} style={{ marginBottom: '10px' }}> {/* Contenitore esterno con margine inferiore */}
-                                <Link to={`/edit-scheda?scheda=${id}`}>
-                                <Card hoverable className="custom-card"> {/* Aggiungi la classe custom-card */}
-                                <div style={{ padding: '0px 0px 0px 0px' }}> {/* Aggiunto padding orizzontale */}
-                                            <h1 className="autore-quill">
-                                                <ReactQuill
-                                                    value={scheda.autore}
-                                                    readOnly={true}
-                                                    theme={"bubble"}
-                                                />
-                                            </h1>
-                                            <Divider />
-                                            <div className="titolo-quill">
-                                                <ReactQuill
-                                                    value={scheda.titolo}
-                                                    readOnly={true}
-                                                    theme={"bubble"}
-                                                />
-                                            </div>
+                        <Button type="primary" block onClick={fetchSchede}>
+                            Cerca
+                        </Button>
+                    </Card>
+                </Col>
+            </Row>
+            {cercato &&
+                <Row justify="center" style={{ marginTop: 16 }}>
+                    <Col xs={24} md={12}>
+                        {!schede.length
+                            ?
+                            <Alert message="Nessun risultato trovato" type="error" />
+                            :
+                            <>
+                                <h3 style={{ color: 'rgba(30, 35, 50)' }}>
+                                    Risultati ricerca: {schede.length}
+                                </h3>
+                                {schede.map((scheda, index) => {
+                                    const { id, titolo, autore } = scheda;
+                                    return (
+                                        <div key={index} style={{ marginBottom: '10px' }}> {/* Contenitore esterno con margine inferiore */}
+                                            <Link to={`/edit-scheda?scheda=${id}`}>
+                                                <Card hoverable className="custom-card"> {/* Aggiungi la classe custom-card */}
+                                                    <div style={{ padding: '0px 0px 0px 0px' }}> {/* Aggiunto padding orizzontale */}
+                                                        <h1 className="autore-quill">
+                                                            <ReactQuill
+                                                                value={scheda.autore}
+                                                                readOnly={true}
+                                                                theme={"bubble"}
+                                                            />
+                                                        </h1>
+                                                        <Divider />
+                                                        <div className="titolo-quill">
+                                                            <ReactQuill
+                                                                value={scheda.titolo}
+                                                                readOnly={true}
+                                                                theme={"bubble"}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </Card>
+                                            </Link>
                                         </div>
-                                    </Card>
-                                </Link>
-                            </div>
-                            )
-                        })}
-                    </>
-                }
-            </Col>
-        </Row>
-        }
-        <style jsx>{`
+                                    )
+                                })}
+                            </>
+                        }
+                    </Col>
+                </Row>
+            }
+            <style jsx>{`
             @media (max-width: 768px) {
                 img {
                     max-width: 100%;
