@@ -82,10 +82,21 @@ ant-btn-dashed:hover {
 
 /* Stili per le schede */
 .custom-card {
-  background-color: transparent; /* Rendi lo sfondo trasparente */
+  /* Rendi lo sfondo trasparente */
+  /*background-color: transparent; */
+  background-color: white; /* Rendi lo sfondo trasparente */
+  color: black; /* Rendi lo sfondo trasparente */
   /*border: 1px solid rgba(255, 255, 255, 0.7); /* Bordo semi-trasparente */
   border: 1px solid #859398; /* Bordo inferiore grigio */
-  color: white; /* Colore del testo */
+  /* Colore del testo */
+  /*color: white; */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Aggiungi transizione */
+  min-height: 250px; /* Altezza minima uniforme per tutte le card */
+}
+
+.custom-card:hover {
+  transform: scale(1.05); /* Ingrandisce la card del 5% */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Aggiunge un'ombra al passaggio del mouse */
 }
 
 .custom-card-search {
@@ -98,3 +109,40 @@ ant-btn-dashed:hover {
   padding: 16px; /* Imposta un padding interno per il contenuto della card */
 }
 
+/* Card styling for uniform height and truncation */
+.fixed-card-height {
+  height: 250px; /* Imposta un’altezza fissa */
+  overflow: hidden; /* Nasconde l’overflow del testo */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white; /* Rendi lo sfondo trasparente */
+  color: black; /* Rendi lo sfondo trasparente */
+}
+
+.fixed-card-height .ant-card-body {
+  padding: 16px;
+}
+
+
+/* Stile per la sezione autore */
+.autore-quill .ql-editor {
+  font-size: 16px;
+  max-height: 60px; /* Altezza massima per limitare lo spazio */
+  overflow: hidden; 
+  text-overflow: ellipsis; /* Mostra '...' quando il testo è troppo lungo */
+  display: -webkit-box; /* Necessario per il supporto dei puntini di sospensione */
+  -webkit-box-orient: vertical; /* Orienta il box verticalmente */
+  -webkit-line-clamp: 3; /* Numero di righe visibili */
+}
+
+/* Stile per la sezione titolo */
+.titolo-quill .ql-editor {
+  font-size: 14px;
+  max-height: 50px; /* Altezza massima per limitare lo spazio */
+  overflow: hidden; 
+  text-overflow: ellipsis; /* Mostra '...' quando il testo è troppo lungo */
+  display: -webkit-box; /* Necessario per il supporto dei puntini di sospensione */
+  -webkit-box-orient: vertical; /* Orienta il box verticalmente */
+  -webkit-line-clamp: 2; /* Numero di righe visibili */
+}

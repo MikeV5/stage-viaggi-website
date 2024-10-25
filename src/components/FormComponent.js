@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';     //Quando modifichi una scheda
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { db } from './firebase';
 import { ref, get, set, push } from 'firebase/database';
@@ -46,7 +46,7 @@ const FormComponent = () => {
     }, [idScheda, form]);
 
     const handleSubmit = (values) => {
-        
+
         if (!stripHtmlTags(autoreValue) || !stripHtmlTags(titoloValue) || !stripHtmlTags(textValue)) {
             message.error('Assicurati di compilare tutti i campi.');
             return;
@@ -55,6 +55,9 @@ const FormComponent = () => {
         values.autore = autoreValue;
         values.titolo = titoloValue;
         values.testo = textValue;
+
+        // Aggiungi la data di ultima modifica
+        values.dataLastModifica = new Date().toISOString();
 
         const schedaRef = idScheda ? ref(db, `schede/${idScheda}`) : push(ref(db, 'schede'));
         set(schedaRef, values)
@@ -81,11 +84,16 @@ const FormComponent = () => {
         validator: (_, value) => validateEmpty(fieldName, value)
     }];
 
+    const handletAnnulla = () => {
+        navigate(`/edit-scheda?scheda=${idScheda}`);
+    }
+
+
     return (
         <Row justify="center">
             <Col xs={24} md={12}>
                 <Card title="Inserire Informazioni">
-                    <Form 
+                    <Form
                         form={form}
                         onFinish={handleSubmit}
                         autoComplete="off"
@@ -139,6 +147,11 @@ const FormComponent = () => {
                         <Form.Item>
                             <Button type="primary" block onClick={() => form.submit()}>
                                 Salva
+                            </Button>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" block onClick={handletAnnulla}>
+                                Annulla
                             </Button>
                         </Form.Item>
                     </Form>

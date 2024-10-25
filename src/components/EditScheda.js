@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';            //Informazioni scheda
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Row, Col, Card, Button, Divider, Tag } from "antd";
-import { db, auth } from './firebase'; // Importa auth da firebase
-import { ref, get } from 'firebase/database';
-import { onAuthStateChanged } from 'firebase/auth'; // Importa onAuthStateChanged
+import { Row, Col, Card, Button, Divider, Tag, Modal } from "antd"; // Importa Modal da Ant Design
+import { db, auth } from './firebase';
+import { ref, get, remove } from 'firebase/database';
+import { onAuthStateChanged } from 'firebase/auth';
 import { PDFDownloadLink, Document, Page, Text, StyleSheet, Font } from '@react-pdf/renderer';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -13,22 +13,22 @@ import 'react-quill/dist/quill.bubble.css';
 Font.register({
     family: 'Roboto',
     fonts: [
-      {
-        src: '/fonts/Roboto-Regular.ttf',
-      },
-      {
-        src: '/fonts/Roboto-Italic.ttf',
-        fontStyle: 'italic',
-      },
-      {
-        src: '/fonts/Roboto-Bold.ttf',
-        fontWeight: 'bold'
-      },
-      {
-        src: '/fonts/Roboto-BoldItalic.ttf',
-        fontStyle: 'italic',
-        fontWeight: 'bold'
-      },
+        {
+            src: '/fonts/Roboto-Regular.ttf',
+        },
+        {
+            src: '/fonts/Roboto-Italic.ttf',
+            fontStyle: 'italic',
+        },
+        {
+            src: '/fonts/Roboto-Bold.ttf',
+            fontWeight: 'bold'
+        },
+        {
+            src: '/fonts/Roboto-BoldItalic.ttf',
+            fontStyle: 'italic',
+            fontWeight: 'bold'
+        },
     ],
 });
 
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         textAlign: 'justify',
         fontSize: 14,
-        fontStyle: 'italic', 
+        fontStyle: 'italic',
         fontWeight: 'bold',
         marginVertical: 10,
     },
@@ -68,7 +68,7 @@ const stripHtmlTags = (html) => {
     if (!html || !/<[a-z][\s\S]*>/i.test(html)) {
         return html || ''; // Se non ci sono tag HTML, restituisci la stringa così com'è o una stringa vuota se html è null
     }
-    
+
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const paragraphs = doc.querySelectorAll('p');
     let text = '';
@@ -90,24 +90,37 @@ const MyDocument = ({ scheda }) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <Text style={styles.autore}>{stripHtmlTags(scheda.autore)}</Text>
-            <Text style={{ ...styles.title}}>{stripHtmlTags(scheda.titolo)}</Text>
+            <Text style={{ ...styles.title }}>{stripHtmlTags(scheda.titolo)}</Text>
             <Text style={styles.text}>{stripHtmlTags(scheda.testo)}</Text>
         </Page>
     </Document>
 );
+
+// Funzione per la conferma
+const showConfirm = (handleEliminaClick) => {
+    Modal.confirm({
+        title: 'Sei sicuro di voler eliminare questa scheda?',
+        content: 'Questa azione è irreversibile.',
+        okText: 'Sì',
+        cancelText: 'No',
+        okButtonProps: { style: { backgroundColor: '#ff4d4f', borderColor: '#ff4d4f', color: 'white' } }, // Rosso per "Sì"
+        cancelButtonProps: { style: { color: 'black' } }, // Nero per "No"
+        onOk: handleEliminaClick,
+    });
+};
 
 const EditScheda = () => {
     const [scheda, setScheda] = useState();
     const [searchParams] = useSearchParams();
     const idScheda = searchParams.get("scheda");
     const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Stato per l'autenticazione
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setIsLoggedIn(!!user); // Imposta lo stato in base alla presenza dell'utente
+            setIsLoggedIn(!!user);
         });
-        return () => unsubscribe(); // Pulisci l'evento all'unmount
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {
@@ -138,6 +151,26 @@ const EditScheda = () => {
     const handleEditClick = () => {
         navigate(`/edit-form?scheda=${idScheda}`);
     };
+
+    const handleEliminaClick = () => {
+        const schedaRef = ref(db, `schede/${idScheda}`);
+        remove(schedaRef)
+            .then(() => {
+                alert("Scheda eliminata con successo.");
+                navigate('/');
+            })
+            .catch((error) => {
+                console.error('Errore nella cancellazione della scheda:', error);
+                alert("Errore nella cancellazione della scheda.");
+            });
+    };
+
+    // Funzione per formattare la data
+    const formatData = (isoDate) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        return new Date(isoDate).toLocaleDateString('it-IT', options);
+    };
+
 
     return (
         <Row justify="center">
@@ -183,14 +216,27 @@ const EditScheda = () => {
                                     </Tag>
                                 ))
                             ) : (
-                                <span style={{marginLeft: '16px',  color: 'red' }}>Nessun tag trovato</span>
+                                <span style={{ marginLeft: '16px', color: 'red' }}>Nessun tag trovato</span>
                             )}
                         </div>
+                         {/* Aggiungi la data di creazione qui */}
+                    <div style={{ textAlign: 'right', marginTop: 16, fontSize: '12px', color: '#888' }}>
+                        {scheda.data ? `Creato: ${formatData(scheda.data)}` : ''}
+                    </div>
+                      {/* Aggiungi la data di creazione qui */}
+                      <div style={{ textAlign: 'right', marginTop: 16, fontSize: '12px', color: '#888' }}>
+                        {scheda.dataLastModifica ? `Ultima modifica: ${formatData(scheda.dataLastModifica)}` : ''}
+                    </div>
                     </div>
                 </Card>
-                {isLoggedIn && ( // Mostra il pulsante solo se l'utente è loggato
-                    <Button style={{ marginTop: 16 }} onClick={handleEditClick}>
+                {isLoggedIn && (
+                    <Button style={{ marginTop: 16, marginRight: 16 }} onClick={handleEditClick}>
                         Modifica
+                    </Button>
+                )}
+                {isLoggedIn && (
+                    <Button style={{ marginTop: 16 }} onClick={() => showConfirm(handleEliminaClick)}>
+                        Elimina
                     </Button>
                 )}
             </Col>

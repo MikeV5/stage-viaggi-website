@@ -104,7 +104,7 @@ const AllSchede = () => {
                         {filteredSchede.map((scheda) => (
                             <Col xs={24} sm={12} md={8} lg={6} xl={4} key={scheda.id}>
                                 <Link to={`/edit-scheda?scheda=${scheda.id}`}>
-                                    <Card hoverable>
+                                    <Card hoverable className="custom-card fixed-card-height">
                                         <div>
                                             <h1 className="autore-quill">
                                                 <ReactQuill

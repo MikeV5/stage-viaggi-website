@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react';        //AggiungiScheda
 import { db } from './firebase';
 import { ref, set, push } from 'firebase/database';
 import { Row, Col, Card, Form, Input, Button, Space, Divider } from 'antd';
@@ -37,6 +37,9 @@ const FormComponent = () => {
         if (values.tags) {
             values.tags = values.tags.map(tag => tag.toLowerCase());
         }
+
+        // Aggiungi la data di creazione
+        values.data = new Date().toISOString();
 
         const nuovaSchedaRef = push(ref(db, 'schede'));
         set(nuovaSchedaRef, values)
@@ -81,21 +84,21 @@ const FormComponent = () => {
                             name="autore"
                             rules={rules("Autore")}
                         >
-                             <ReactQuill value={autoreValue} onChange={setAutoreValue} />
+                            <ReactQuill value={autoreValue} onChange={setAutoreValue} />
                         </Form.Item>
                         <Form.Item
                             label="Titolo"
                             name="titolo"
                             rules={rules("Titolo")}
                         >
-                             <ReactQuill value={titoloValue} onChange={setTitoloValue} />
+                            <ReactQuill value={titoloValue} onChange={setTitoloValue} />
                         </Form.Item>
                         <Form.Item
                             label="Testo"
                             name="testo"
                             rules={rules("Testo")}
                         >
-                             <ReactQuill value={textValue} onChange={setTextValue} />
+                            <ReactQuill value={textValue} onChange={setTextValue} />
                         </Form.Item>
                         <Divider />
                         <Form.List name="tags">

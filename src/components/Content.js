@@ -174,7 +174,7 @@ const Content = () => {
                         {schede.map((scheda, index) => {
                             const { id, titolo, autore } = scheda;
                             return (
-                                <div key={index} style={{ marginBottom: '2px' }}> {/* Contenitore esterno con margine inferiore */}
+                                <div key={index} style={{ marginBottom: '10px' }}> {/* Contenitore esterno con margine inferiore */}
                                 <Link to={`/edit-scheda?scheda=${id}`}>
                                 <Card hoverable className="custom-card"> {/* Aggiungi la classe custom-card */}
                                 <div style={{ padding: '0px 0px 0px 0px' }}> {/* Aggiunto padding orizzontale */}
